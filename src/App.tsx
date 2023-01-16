@@ -34,6 +34,8 @@ function App() {
         <ToDoSpace displaytodo={storedtodo} />
       </div>
 
+      <hr></hr>
+      <Footer></Footer>
     </div>
   );
 }
