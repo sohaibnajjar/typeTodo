@@ -28,7 +28,12 @@ function App() {
       
       <AddTask />
       </div>
-      
+      <hr></hr>
+
+      <div>
+        <ToDoSpace displaytodo={storedtodo} />
+      </div>
+
     </div>
   );
 }
