@@ -18,12 +18,6 @@ const App = () => {
   const [isTasksShown, setIsTasksShown] = React.useState<boolean>(true);
 
   React.useEffect(() => {
-    if (storedTodos.length) {
-      localStorage.setItem("todo", JSON.stringify(storedTodos));
-    }
-  }, [storedTodos]);
-
-  React.useEffect(() => {
     const localStorageTodos = JSON.parse(
       localStorage.getItem("todo")!
     ) as Todo[];
@@ -34,15 +28,19 @@ const App = () => {
   }, []);
 
   const handleAddTask = (newTask: string) => {
-    setStoredTodos((prev) => [
-      ...prev,
-      {
-        id: Math.random() * 100,
-        number: prev.length + 1,
-        task: newTask,
-        done: false,
-      },
-    ]);
+    setStoredTodos((prev) => {
+      const newTodos = [
+        ...prev,
+        {
+          id: Math.random() * 100,
+          number: prev.length + 1,
+          task: newTask,
+          done: false,
+        },
+      ];
+      localStorage.setItem("todo", JSON.stringify(newTodos));
+      return newTodos;
+    });
   };
 
   const renderdTasks = storedTodos.filter((todo) =>
