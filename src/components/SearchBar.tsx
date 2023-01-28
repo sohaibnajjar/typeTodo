@@ -1,38 +1,41 @@
+import * as React from "react";
 
-import * as React from 'react';
-import { useState } from "react";
-import '../App.css';
+interface searchBarProps {
+  filterValue: string;
+  isTasksShown: boolean;
+  onFilterValueChange: (filterValue: string) => void;
+  onShowTaskChangeChange: () => void;
+}
 
-let searchtask = [];
-
-type searchBarProps = {
-    filterText: string
-    toggle: boolean
-    onFilterTextChange:Function 
-    ontoggleChange:Function
-  }
-  export default function SearchBar ({filterText, toggle, onFilterTextChange, ontoggleChange}: searchBarProps){
-
-    return (
-      <div>
-        <div className="componant" aria-roledescription="search">
-          <input
-            onChange={(e) => {
-              onFilterTextChange(e.target.value);
-            }}
-            type="search"
-            className="searchBar"
-            placeholder="Search for a task"
-          />
-        </div>
-        <label>
-          <input
-            type="checkbox"
-            checked={toggle}
-            onChange={(e) => ontoggleChange(e.target.checked)}
-          />{" "}
-          check to hide to dos
-        </label>
+const SearchBar: React.FC<searchBarProps> = ({
+  filterValue,
+  isTasksShown,
+  onFilterValueChange,
+  onShowTaskChangeChange,
+}) => {
+  return (
+    <div>
+      <div className="componant" aria-roledescription="search">
+        <input
+          value={filterValue}
+          onChange={(e) => {
+            onFilterValueChange(e.target.value.toLowerCase());
+          }}
+          type="search"
+          className="searchBar"
+          placeholder="Search for a task"
+        />
       </div>
-    );
-  }
+      <label>
+        <input
+          type="checkbox"
+          checked={!isTasksShown}
+          onChange={onShowTaskChangeChange}
+        />
+        check to hide to Todos
+      </label>
+    </div>
+  );
+};
+
+export default SearchBar;
