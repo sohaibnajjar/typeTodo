@@ -7,7 +7,6 @@ import ToDo from "./components/ToDo";
 
 export interface Todo {
   id: number;
-  number: number;
   task: string;
   done: boolean;
 }
@@ -18,9 +17,7 @@ const App = () => {
   const [isTasksShown, setIsTasksShown] = React.useState<boolean>(true);
 
   React.useEffect(() => {
-    const localStorageTodos = JSON.parse(
-      localStorage.getItem("todo")!
-    ) as Todo[];
+    const localStorageTodos: Todo[] = JSON.parse(localStorage.getItem("todo")!);
 
     if (Boolean(localStorageTodos)) {
       setStoredTodos(localStorageTodos);
@@ -33,7 +30,6 @@ const App = () => {
         ...prev,
         {
           id: Math.random() * 100,
-          number: prev.length + 1,
           task: newTask,
           done: false,
         },
@@ -43,12 +39,8 @@ const App = () => {
     });
   };
 
-  const renderdTasks = storedTodos.filter((todo) =>
-    todo.task.includes(filterValue)
-  );
-
   const handleTaskDelete = (id: number) => {
-    const filteredValues = storedTodos.filter((todo) => todo.id === id);
+    const filteredValues = storedTodos.filter((todo) => todo.id !== id);
     setStoredTodos(filteredValues);
     localStorage.setItem("todo", JSON.stringify(filteredValues));
   };
@@ -60,6 +52,10 @@ const App = () => {
     setStoredTodos(mappedTasks);
     localStorage.setItem("todo", JSON.stringify(mappedTasks));
   };
+
+  const renderdTasks = storedTodos.filter((todo) =>
+    todo.task.includes(filterValue)
+  );
 
   return (
     <div>
@@ -76,24 +72,19 @@ const App = () => {
         onFilterValueChange={setFilterValue}
         onShowTaskChangeChange={() => setIsTasksShown((prev) => !prev)}
       />
+
       <div className="tasks">
         {isTasksShown &&
-          renderdTasks.map((todo) => (
+          renderdTasks.map((todo, index) => (
             <ToDo
               key={todo.id}
+              index={index + 1}
               todo={todo}
               onDelete={handleTaskDelete}
               onChangeDone={handleOnChangeDone}
             />
           ))}
       </div>
-      <button
-        onClick={() => {
-          localStorage.setItem("todo", JSON.stringify([]));
-        }}
-      >
-        her
-      </button>
       <Footer storedTodos={storedTodos} />
     </div>
   );
